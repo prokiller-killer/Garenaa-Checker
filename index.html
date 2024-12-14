@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Deathnote Sentinel Garena Checker</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #1f1f2e;
+      margin: 0;
+      padding: 0;
+      color: #f0f0f0;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 0;
+      background-color: #262a38;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    header img {
+      height: 100px;
+      width: auto;
+      border-radius: 50%;
+    }
+
+    header h1 {
+      margin: 10px 0;
+      color: #4caf50;
+      font-size: 2em;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #2c2f3e;
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    main h2 {
+      color: #4caf50;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1em;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #4caf50;
+      border-radius: 5px;
+      background-color: #3a3d4e;
+      color: #f0f0f0;
+      font-size: 1em;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4caf50;
+      color: white;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    pre {
+      background-color: #1e222d;
+      color: #e0e0e0;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1em;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://i.imgur.com/Lofbm58.jpeg" alt="Logo">
+    <h1>Cyber Deathnote Garena Checker</h1>
+  </header>
+  <main>
+    <p>Upload your .txt file to check the data.</p>
+    <input type="file" id="fileInput" accept=".txt">
+    <button onclick="processFile()">Start</button>
+    <h2>Result:</h2>
+    <pre id="output">Your results will appear here...</pre>
+  </main>
+  <script>
+    function processFile() {
+      const fileInput = document.getElementById('fileInput');
+      const output = document.getElementById('output');
+
+      if (!fileInput.files.length) {
+        alert('Please select a file to process.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+        const content = event.target.result;
+
+        const lines = content.trim().split('\n');
+        const filteredAndSortedLines = lines
+          .filter(line => line.includes('garena.com'))
+          .map(line => {
+            const parts = line.split(':');
+            return { url: parts[0], logPass: parts.slice(1).join(':') };
+          })
+          .sort((a, b) => a.url.localeCompare(b.url))
+          .map(item => `${item.url}:${item.logPass}`);
+
+        output.textContent = filteredAndSortedLines.length
+          ? filteredAndSortedLines.join('\n')
+          : 'No lines containing "garena.com" found.';
+      };
+
+      reader.onerror = function() {
+        alert('Failed to read the file. Please try again.');
+      };
+
+      reader.readAsText(file);
+    }
+  </script>
+</body>
+</html>
